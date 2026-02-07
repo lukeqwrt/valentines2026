@@ -8,7 +8,6 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 export default defineConfig({
   plugins: [
     vue(),
-    vueDevTools(),
   ],
   base:'/valentines2026/',
   resolve: {

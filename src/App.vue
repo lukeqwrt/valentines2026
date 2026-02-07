@@ -24,39 +24,36 @@ I can’t wait to spend this special day with you 🌹
 let escaping = false
 
 const moveNo = (event) => {
-  const btn = event.target
-  const rect = btn.getBoundingClientRect()
+  if (escaping) return
+  escaping = true
 
-  const padding = 20
-  const escapeDistance = 120
+  const button = event.target
+  const rect = button.getBoundingClientRect()
 
-  const viewportWidth = window.innerWidth
-  const viewportHeight = window.innerHeight
+  const mouseX = event.clientX
+  const mouseY = event.clientY
 
-  // Cursor / touch position
-  const clientX = event.touches?.[0]?.clientX ?? event.clientX
-  const clientY = event.touches?.[0]?.clientY ?? event.clientY
+  const buttonX = rect.left + rect.width / 2
+  const buttonY = rect.top + rect.height / 2
 
-  // Button center
-  const btnX = rect.left + rect.width / 2
-  const btnY = rect.top + rect.height / 2
+  const diffX = buttonX - mouseX
+  const diffY = buttonY - mouseY
 
-  const diffX = btnX - clientX
-  const diffY = btnY - clientY
+  const distance = 180
   const angle = Math.atan2(diffY, diffX)
 
-  let newX = noPos.value.x + Math.cos(angle) * escapeDistance
-  let newY = noPos.value.y + Math.sin(angle) * escapeDistance
+  const x = Math.cos(angle) * distance
+  const y = Math.sin(angle) * distance
 
-  // Clamp inside viewport
-  const maxX = viewportWidth - rect.width - padding
-  const maxY = viewportHeight - rect.height - padding
+  noStyle.value = {
+    transform: `translate(${x}px, ${y}px)`
+  }
 
-  newX = Math.max(-maxX / 2, Math.min(maxX / 2, newX))
-  newY = Math.max(-maxY / 2, Math.min(maxY / 2, newY))
-
-  noPos.value = { x: newX, y: newY }
+  setTimeout(() => {
+    escaping = false
+  }, 300)
 }
+
 
 </script>
 
@@ -89,15 +86,11 @@ const moveNo = (event) => {
         <button class="yes" @click="sayYes">Yes 💕</button>
         <button
           class="no"
-          :style="{
-            transform: `translate(${noPos.x}px, ${noPos.y}px)`
-          }"
-          @mouseenter="moveNo"
-          @touchstart.prevent="moveNo"
+          :style="noStyle"
+          @mousemove="moveNo"
         >
           No 🙈
         </button>
-
 
       </div>
 
