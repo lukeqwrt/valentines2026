@@ -24,36 +24,39 @@ I can’t wait to spend this special day with you 🌹
 let escaping = false
 
 const moveNo = (event) => {
-  if (escaping) return
-  escaping = true
+  const btn = event.target
+  const rect = btn.getBoundingClientRect()
 
-  const button = event.target
-  const rect = button.getBoundingClientRect()
+  const padding = 20
+  const escapeDistance = 120
 
-  const mouseX = event.clientX
-  const mouseY = event.clientY
+  const viewportWidth = window.innerWidth
+  const viewportHeight = window.innerHeight
 
-  const buttonX = rect.left + rect.width / 2
-  const buttonY = rect.top + rect.height / 2
+  // Cursor / touch position
+  const clientX = event.touches?.[0]?.clientX ?? event.clientX
+  const clientY = event.touches?.[0]?.clientY ?? event.clientY
 
-  const diffX = buttonX - mouseX
-  const diffY = buttonY - mouseY
+  // Button center
+  const btnX = rect.left + rect.width / 2
+  const btnY = rect.top + rect.height / 2
 
-  const distance = 180
+  const diffX = btnX - clientX
+  const diffY = btnY - clientY
   const angle = Math.atan2(diffY, diffX)
 
-  const x = Math.cos(angle) * distance
-  const y = Math.sin(angle) * distance
+  let newX = noPos.value.x + Math.cos(angle) * escapeDistance
+  let newY = noPos.value.y + Math.sin(angle) * escapeDistance
 
-  noStyle.value = {
-    transform: `translate(${x}px, ${y}px)`
-  }
+  // Clamp inside viewport
+  const maxX = viewportWidth - rect.width - padding
+  const maxY = viewportHeight - rect.height - padding
 
-  setTimeout(() => {
-    escaping = false
-  }, 300)
+  newX = Math.max(-maxX / 2, Math.min(maxX / 2, newX))
+  newY = Math.max(-maxY / 2, Math.min(maxY / 2, newY))
+
+  noPos.value = { x: newX, y: newY }
 }
-
 
 </script>
 
@@ -79,18 +82,22 @@ const moveNo = (event) => {
 
       <p class="question">
         I was wondering…<br />
-        <strong>Will you be my Valentine? 💖</strong>
+        <strong>Will you be my Valentine date? 💖</strong>
       </p>
 
       <div class="buttons">
         <button class="yes" @click="sayYes">Yes 💕</button>
         <button
           class="no"
-          :style="noStyle"
-          @mousemove="moveNo"
+          :style="{
+            transform: `translate(${noPos.x}px, ${noPos.y}px)`
+          }"
+          @mouseenter="moveNo"
+          @touchstart.prevent="moveNo"
         >
           No 🙈
         </button>
+
 
       </div>
 
