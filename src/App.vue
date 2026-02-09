@@ -84,7 +84,7 @@ const moveNo = (event) => {
 
       <p class="question">
         I was wondering…<br />
-        <strong>Will you be my Valentine date? 💖</strong>
+        <strong>Will you be my Valentine? 💖</strong>
       </p>
 
       <div class="buttons">
@@ -99,15 +99,17 @@ const moveNo = (event) => {
 
       </div>
 
-      <p v-if="message" class="message">
-        {{ message }}
-      </p>
     </div>
     <div v-else>
       <audio ref="player">
         <source src="/Tootsie_Guevara_-_Mahal_Ka_Sa_Akin_(mp3.pm).mp3" type="audio/mpeg" />
       </audio>
-      <img src="/dudu-bubu-dancing-so-cute.gif" alt="">
+      <div class="message-yes">
+        <p v-if="message" class="message">
+          {{ message }}
+        </p>
+        <img src="/dudu-bubu-dancing-so-cute.gif" alt="">
+      </div>
       <CarouselComponent />
     </div>
   </div>
@@ -222,5 +224,11 @@ button {
   color: #ff4d6d;
   font-weight: 600;
   white-space: pre-line;
+}
+.message-yes {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 </style>
