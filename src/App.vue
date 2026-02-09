@@ -1,18 +1,20 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
+import CarouselComponent from './components/CarouselComponent.vue';
 
 const message = ref('')
 const showFlowers = ref(false)
 const yes = ref(false)
-
+const player = ref(null);
 const noStyle = ref({
   transform: 'translate(0, 0)'
 })
 
+
 const flowerTypes = ['🌹', '🌷', '🌸', '💐', '🌺']
 const flowers = Array.from({ length: 50 })
 
-const sayYes = () => {
+const sayYes = async () => {
   showFlowers.value = true
   yes.value = true
   message.value = `
@@ -20,6 +22,9 @@ const sayYes = () => {
 Thank you for being my Valentine 🥰
 I can’t wait to spend this special day with you 🌹
   `
+
+  await nextTick() // wait for <audio> to exist
+  player.value.play()
 }
 let escaping = false
 
@@ -75,7 +80,7 @@ const moveNo = (event) => {
     </div>
 
     <div v-if="!yes" class="card">
-      <h1>💌 Hey my Aira</h1>
+      <h1>💌 Hi Aira</h1>
 
       <p class="question">
         I was wondering…<br />
@@ -99,7 +104,11 @@ const moveNo = (event) => {
       </p>
     </div>
     <div v-else>
-      <img src="/public/dudu-bubu-dancing-so-cute.gif" alt="">
+      <audio ref="player">
+        <source src="/Tootsie_Guevara_-_Mahal_Ka_Sa_Akin_(mp3.pm).mp3" type="audio/mpeg" />
+      </audio>
+      <img src="/dudu-bubu-dancing-so-cute.gif" alt="">
+      <CarouselComponent />
     </div>
   </div>
 </template>
