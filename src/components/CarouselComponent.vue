@@ -44,11 +44,22 @@ onMounted(() => {
 
 .carousel-main {    
   position: absolute;
-  width: 300px;
-  height: 400px;
+  width: 500px;
+  height: 600px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+@media screen and (max-width: 600px) {
+  .carousel-main {
+    width: 300px;
+    height: 400px;
+
+  }
 }
 
 .carousel-img {
@@ -60,6 +71,7 @@ onMounted(() => {
     border-radius: 20px;       /* Rounded corners for a soft look */
     padding: 5px;              /* Space between image and border */
     box-shadow: 0 0 15px rgba(255, 77, 109, 0.6); /* Soft pink glow */
+    border-radius: 12px;
 }
 
 /* Fade animation */
